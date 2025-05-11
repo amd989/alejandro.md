@@ -1,23 +1,20 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
-
     <NavMenu />
+
     <main class="px-3">
-        <article class="content px-4 text-md-start">
-            @Body
-        </article>
+        @Body
     </main>
 
-    <footer class="mt-auto text-white-50">
-        <div class="d-flex w-100 justify-content-between">
-            <small class="mb-1">Alejandro Mora © @DateTime.Now.Year</small>
-            <div class="btn-group">
-                <a href="https://l.alejandro.md/github" class="btn" aria-current="page"><i class="bi bi-github"></i></a>
-                <a href="https://l.alejandro.md/bsky" class="btn"><i class="bi bi-twitter"></i></a>
-                <a href="https://l.alejandro.md/linkedin" class="btn"><i class="bi bi-linkedin"></i></a>
+    <footer>
+        <div class="footer-content">
+            <p class="footer-copyright">Alejandro Mora © @DateTime.Now.Year</p>
+            <div class="social-links">
+                <a href="https://l.alejandro.md/github" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                <a href="https://l.alejandro.md/bsky" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                <a href="https://l.alejandro.md/linkedin" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
             </div>
         </div>
     </footer>
 </div>
-

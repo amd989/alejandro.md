@@ -1,68 +1,68 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Alejandro Mora - Software Engineer</PageTitle>
 
-<div class="container mt-5">
-    <div class="row mb-5">
-        <div class="col-md-8">
-            <p class="text-muted mb-1">· New York, USA</p>
-            <h1 class="display-5 fw-bold mb-3">Hey, I'm Alejandro Mora <span class="wave-emoji">👋</span></h1>
-            <p class="lead">
-                I'm a Software Engineer based in New York City. I <a href="https://l.alejandro.md/github" class="text-decoration-none">code</a>, <a href="https://l.alejandro.md/blog" class="text-decoration-none">write</a>
-            </p>
-            <p class="lead">
-                I love working in-between product, engineering and
-                developer experience, currently at <a href="#" class="text-decoration-none">Company</a>.
-            </p>
-        </div>
-        <div class="col-md-4 text-center">
-            <img src="/img/profile.jpeg" alt="Profile Picture" class="rounded-circle img-fluid" style="max-width: 200px;">
-        </div>
+<div class="intro">
+    <div class="intro-content">
+        <p class="intro-location">· New York, USA</p>
+        <h1>Hey, I'm Alejandro Mora <span class="wave-emoji">👋</span></h1>
+        <p>
+            I'm a Software Engineer based in New York City. I <a href="https://l.alejandro.md/github">code</a>, <a href="https://l.alejandro.md/blog">write</a>
+        </p>
+        <p>
+            I love working in-between product, engineering and
+            developer experience, currently at <a href="#">Company</a>.
+        </p>
     </div>
-
-    <div class="row mb-5">
-        <div class="col-12 d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 fw-bold">Writings</h2>
-            <a href="https://l.alejandro.md/blog" class="text-decoration-none small">View all →</a>
-        </div>
-
-        @foreach (var post in posts)
-        {
-            <div class="col-12 mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-0">@post.PublishDate.ToString("MMM dd, yyyy")</p>
-                        <a href="@post.Link" class="text-decoration-none">
-                            <h3 class="h5 mb-0">@post.Title</h3>
-                        </a>
-                    </div>
-                    <span class="text-muted small">@post.Views views</span>
-                </div>
-                <hr class="my-2">
-            </div>
-        }
-    </div>
-
-
-    <div class="row mb-5">
-        <div class="col-12 mb-4">
-            <h2 class="h3 fw-bold">Projects</h2>
-        </div>
-
-        @foreach (var repo in repositories)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">@repo.Name</h3>
-                        <p class="card-text">@repo.Description</p>
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-primary me-2">@repo.Language</span>
-                            <span class="text-muted small">★ @repo.StargazersCount</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+    <div class="intro-image">
+        <img src="/img/profile.jpeg" alt="Alejandro Mora Profile Picture" width="200" height="200">
     </div>
 </div>
+
+<section class="section">
+    <div class="section-heading">
+        <h2>Writings</h2>
+        <a href="https://l.alejandro.md/blog" class="view-all">View all →</a>
+    </div>
+
+    <div class="blog-list">
+        @foreach (var post in posts)
+        {
+            <div class="blog-item">
+                <div class="blog-item-header">
+                    <div>
+                        <p class="blog-item-date">@post.PublishDate.ToString("MMM dd, yyyy")</p>
+                        <h3 class="blog-item-title">
+                            <a href="@post.Link">@post.Title</a>
+                        </h3>
+                    </div>
+                    <span class="blog-item-views">@post.Views views</span>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <h2>Projects</h2>
+    </div>
+
+    <div class="projects-grid">
+        @foreach (var repo in repositories)
+        {
+            <div class="project-card">
+                <h3 class="project-title">@repo.Name</h3>
+                <p class="project-description">@repo.Description</p>
+                <div class="project-meta">
+                    <span class="project-language">@repo.Language</span>
+                    <span class="project-stars">★ @repo.StargazersCount</span>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    // Code-behind remains the same as in your original implementation
+}
