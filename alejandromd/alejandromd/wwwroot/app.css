@@ -1,0 +1,106 @@
+:root {
+    --bs-primary: #0d6efd;
+    --bs-secondary: #6c757d;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin-bottom: 60px;
+    color: #333;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+/* Custom styles */
+.wave-emoji {
+    display: inline-block;
+    animation: wave 1.5s infinite;
+    transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    10% {
+        transform: rotate(14deg);
+    }
+
+    20% {
+        transform: rotate(-8deg);
+    }
+
+    30% {
+        transform: rotate(14deg);
+    }
+
+    40% {
+        transform: rotate(-4deg);
+    }
+
+    50% {
+        transform: rotate(10deg);
+    }
+
+    60% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+    body.dark-mode .navbar {
+        background-color: #1e1e1e !important;
+        border-bottom: 1px solid #333;
+    }
+
+    body.dark-mode .navbar-light .navbar-nav .nav-link {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .card {
+        background-color: #1e1e1e;
+        border: none;
+    }
+
+    body.dark-mode .text-dark {
+        color: #e0e0e0 !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #aaa !important;
+    }
+
+    body.dark-mode .border-top,
+    body.dark-mode .border-bottom {
+        border-color: #333 !important;
+    }
+
+    body.dark-mode .footer {
+        background-color: #1e1e1e;
+        border-top: 1px solid #333;
+    }
+
+    body.dark-mode #theme-toggle i {
+        color: #e0e0e0;
+    }
