@@ -1,21 +1,22 @@
 ﻿@page "/"
+@rendermode InteractiveAuto
 
 <PageTitle>Alejandro Mora - Software Engineer</PageTitle>
 
 <div class="intro">
     <div class="intro-content">
-        <p class="intro-location">· New York, USA</p>
+        <p class="intro-location">@currentTime · New York, USA</p>
         <h1>Hey, I'm Alejandro Mora <span class="wave-emoji">👋</span></h1>
         <p>
-            I'm a Software Engineer based in New York City. I <a href="https://l.alejandro.md/github">code</a>, <a href="https://l.alejandro.md/blog">write</a>
+            I'm a Software Engineer based in New York City. I <a href="https://l.alejandro.md/github">code</a>, <a href="https://l.alejandro.md/blog">write</a> and make <a href="https://l.alejandro.md/printables">silly</a> stuff.
         </p>
         <p>
-            I love working in-between product, engineering and
-            developer experience, currently at <a href="#">Company</a>.
+            I'm interested in technology related fields, including Software Development,
+            IoT and Technology Integration with a particular interest in ubiquitous computing.
         </p>
     </div>
     <div class="intro-image">
-        <img src="/img/profile.jpeg" alt="Alejandro Mora Profile Picture" width="200" height="200">
+        <img src="/img/profile.jpeg" alt="Alejandro Mora Profile Picture">
     </div>
 </div>
 
@@ -51,18 +52,37 @@
     <div class="projects-grid">
         @foreach (var repo in repositories)
         {
-            <div class="project-card">
-                <h3 class="project-title">@repo.Name</h3>
-                <p class="project-description">@repo.Description</p>
-                <div class="project-meta">
-                    <span class="project-language">@repo.Language</span>
-                    <span class="project-stars">★ @repo.StargazersCount</span>
+            <a href="@repo.Link">
+                <div class="project-card">
+                    <h3 class="project-title">@repo.Name</h3>
+                    <p class="project-description">@repo.Description</p>
+                    <div class="project-meta">
+                        <span class="project-language @repo.Language.CssSanitize()"></span>
+                        <span>@repo.Language</span>
+                        <span class="project-stars">★ @repo.StargazersCount</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         }
     </div>
 </section>
 
 @code {
-    // Code-behind remains the same as in your original implementation
+    private string currentTime;
+
+    protected override void OnInitialized()
+    {
+        currentTime = DateTime.Now.ToString("hh:mm:ss tt");
+        var timer = new System.Timers.Timer(1000);
+        timer.Elapsed += (sender, args) =>
+        {
+            InvokeAsync(() =>
+            {
+                currentTime = DateTime.Now.ToString("hh:mm:ss tt");
+                StateHasChanged();
+            });
+        };
+        timer.AutoReset = true;
+        timer.Start();
+    }
 }

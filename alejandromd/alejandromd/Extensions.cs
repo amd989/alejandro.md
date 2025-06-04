@@ -17,5 +17,10 @@ namespace alejandromd
             await cache.SetStringAsync(key, JsonSerializer.Serialize(result));
             return result;
         }
+
+        public static string CssSanitize(this string language)
+        {
+            return language.ToLower().Replace(" ", "-").Replace("+", "plus").Replace("#", "sharp");
+        }
     }
 }

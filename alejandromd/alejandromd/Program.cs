@@ -42,7 +42,7 @@ namespace alejandromd
             builder.Services.AddTransient(sp => 
             {
                 var options = sp.GetRequiredService<IOptionsSnapshot<GitHubOptions>>().Value;
-                var authenticator = sp.GetRequiredService<AppAuthenticator>();
+                var authenticator = sp.GetRequiredService<IAuthenticator>();
                 var authData = authenticator.GetToken();
 
                 // Use the JWT as a Bearer token

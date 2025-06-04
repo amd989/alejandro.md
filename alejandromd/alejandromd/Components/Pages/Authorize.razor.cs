@@ -23,7 +23,7 @@ namespace alejandromd.Components.Pages
         public NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        public AppAuthenticator Authenticator { get; set; }
+        public IAuthenticator Authenticator { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
