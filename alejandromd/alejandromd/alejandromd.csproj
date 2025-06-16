@@ -10,12 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="alejandromdwebsite.private-key.pem">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DistributedCachePollyDecorator" Version="1.1.0" />
     <ProjectReference Include="..\alejandromd.Client\alejandromd.Client.csproj" />
     <PackageReference Include="GitHubAuth" Version="1.0.2" />
