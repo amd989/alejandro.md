@@ -4,10 +4,12 @@ using alejandromd.Services;
 using DistributedCachePollyDecorator.Policies;
 using GitHubAuth;
 using GitHubAuth.Jwt;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Octokit;
+using StackExchange.Redis;
 
 namespace alejandromd
 {
@@ -113,11 +115,17 @@ namespace alejandromd
             builder.Services.AddTransient<IGitHubService, GitHubService>();
 
             builder.Services.AddMemoryCache(mo => { mo.TrackStatistics = true; });
-            builder.Services.AddStackExchangeRedisCache(options =>
+
+            var redis = builder.Configuration.GetConnectionString("local");
+            if (!string.IsNullOrWhiteSpace(redis))
             {
-                options.Configuration = builder.Configuration.GetConnectionString("local");
-                options.InstanceName = "alejandromd";
-            });
+                builder.Services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redis;
+                    options.InstanceName = "alejandromd";
+                });
+                builder.Services.AddDataProtection().PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(redis));
+            }
 
             // Decorate the inferface with a simple circuit breaker
             builder.Services.AddDistributedCacheDecorator(new CircuitBreakerSettings()

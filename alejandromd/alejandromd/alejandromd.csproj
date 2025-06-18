@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="DistributedCachePollyDecorator" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.17" />
     <ProjectReference Include="..\alejandromd.Client\alejandromd.Client.csproj" />
     <PackageReference Include="GitHubAuth" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.14" />
