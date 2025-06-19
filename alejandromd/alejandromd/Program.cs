@@ -18,7 +18,7 @@ namespace alejandromd
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Configuration.AddUserSecrets<Program>();
+            builder.Configuration.AddUserSecrets<Program>().AddEnvironmentVariables();
 
             builder.Logging.AddConfiguration(builder.Configuration).AddConsole();
 
@@ -166,8 +166,6 @@ namespace alejandromd
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
-
-            app.UseHttpsRedirection();
 
             //app.UseAuthorization();
 
