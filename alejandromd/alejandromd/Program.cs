@@ -157,6 +157,7 @@ namespace alejandromd
                 app.UseHsts();
             }
 
+            app.UseForwardedHeaders();
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
