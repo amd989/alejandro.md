@@ -17,6 +17,10 @@ COPY ["alejandromd/alejandromd.Client/alejandromd.Client.csproj", "alejandromd/a
 RUN dotnet restore "./alejandromd/alejandromd/alejandromd.csproj"
 COPY . .
 WORKDIR "/src/alejandromd/alejandromd"
+# Restore client-side libraries using LibMan
+RUN dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN libman restore
 RUN dotnet build "./alejandromd.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
