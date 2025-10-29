@@ -5,6 +5,7 @@ using DistributedCachePollyDecorator.Policies;
 using GitHubAuth;
 using GitHubAuth.Jwt;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -21,6 +22,14 @@ namespace alejandromd
             builder.Configuration.AddUserSecrets<Program>().AddEnvironmentVariables();
 
             builder.Logging.AddConfiguration(builder.Configuration).AddConsole();
+
+            // Configure forwarded headers for reverse proxy support
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
 
             builder.Services.Configure<GitHubOptions>(builder.Configuration.GetSection("GitHub"));
             builder.Services.AddHttpClient("GitHub", (sp, client) =>
