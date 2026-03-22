@@ -27,7 +27,7 @@ namespace alejandromd
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.KnownNetworks.Clear();
+                options.KnownIPNetworks.Clear();
                 options.KnownProxies.Clear();
             });
 
@@ -169,7 +169,7 @@ namespace alejandromd
             app.UseForwardedHeaders();
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+            app.MapStaticAssets();
             app.UseAntiforgery();
 
             app.MapRazorComponents<App>()
