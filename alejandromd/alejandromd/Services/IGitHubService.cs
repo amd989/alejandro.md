@@ -1,9 +1,7 @@
-﻿using Octokit;
-
-namespace alejandromd.Services
+﻿namespace alejandromd.Services
 {
     public interface IGitHubService
     {
-        Task<IEnumerable<Repository>> GetRepositoriesAsync();
+        Task<IEnumerable<RepositoryModel>> GetRepositoriesAsync();
     }
 }

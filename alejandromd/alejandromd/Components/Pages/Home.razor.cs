@@ -22,14 +22,7 @@ namespace alejandromd.Components.Pages
         {
             try
             {
-                repositories = (await this.Repository.GetRepositoriesAsync()).Select(a => new RepositoryModel
-                {
-                    Name = a.Name,
-                    Description = a.Description,
-                    Language = a.Language,
-                    StargazersCount = a.StargazersCount.ToString(),
-                    Link = a.HtmlUrl
-                });
+                repositories = await this.Repository.GetRepositoriesAsync();
             }
             catch (Exception ex)
             {
@@ -39,14 +32,5 @@ namespace alejandromd.Components.Pages
             posts = (await this.RssReader.ReadAsync()).Take(8);
             base.OnInitializedAsync();
         }
-    }
-
-    public class RepositoryModel
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Language { get; set; }
-        public string Link { get; set; }
-        public string StargazersCount { get; set; }
     }
 }

@@ -21,10 +21,10 @@
 </div>
 
 <section class="section">
-    <div class="section-heading">
+    <a href="https://l.alejandro.md/blog" class="section-heading">
         <h2>Writings</h2>
-        <a href="https://l.alejandro.md/blog" class="view-all">View all →</a>
-    </div>
+        <span class="view-all">View all →</span>
+    </a>
 
     <div class="blog-list">
         @foreach (var post in posts)
@@ -53,9 +53,12 @@
                     <h3 class="project-title">@repo.Name</h3>
                     <p class="project-description">@repo.Description</p>
                     <div class="project-meta">
-                        <span class="project-language @repo.Language.CssSanitize()"></span>
-                        <span>@repo.Language</span>
-                        <span class="project-stars">★ @repo.StargazersCount</span>
+                        @if (!string.IsNullOrEmpty(repo.Language))
+                        {
+                            <span class="project-language @repo.Language.CssSanitize()"></span>
+                            <span>@repo.Language</span>
+                        }
+                        <span class="project-stars"><svg aria-label="stars" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg> @repo.StargazersCount</span>
                     </div>
                 </div>
             </a>

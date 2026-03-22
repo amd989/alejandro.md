@@ -22,8 +22,9 @@ namespace alejandromd
             return result;
         }
 
-        public static string CssSanitize(this string language)
+        public static string CssSanitize(this string? language)
         {
+            if (string.IsNullOrEmpty(language)) return string.Empty;
             return language.ToLower().Replace(" ", "-").Replace("+", "plus").Replace("#", "sharp");
         }
     }

@@ -4,7 +4,6 @@
     --color-text: #000;
     --color-text-secondary: #666;
     --color-link: #0070f3;
-    --color-link: #0070f3;
     --color-hover: #0060df;
     --color-border: #eaeaea;
     --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
@@ -46,8 +45,7 @@ a {
 }
 
     a:hover {
-        color: var(--color-link);
-        border-color: var(--color-link);
+        opacity: 0.6;
     }
 
 h1, h2, h3, h4, h5, h6 {
@@ -83,7 +81,7 @@ header {
     }
 
         .nav-links a:hover {
-            color: var(--color-link);
+            opacity: 0.6;
         }
 
 .theme-toggle {
@@ -97,7 +95,7 @@ header {
 }
 
     .theme-toggle:hover {
-        color: var(--color-link);
+        opacity: 0.6;
     }
 
 /* Home page intro */
@@ -202,7 +200,18 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: var(--color-text);
 }
+
+    .section-heading:hover {
+        color: var(--color-text);
+        opacity: 1;
+    }
+
+    .section-heading:hover .view-all {
+        opacity: 0.6;
+    }
 
     .section-heading h2 {
         font-size: 1.5rem;
@@ -219,8 +228,7 @@ header {
     }
 
         .section-heading .view-all:hover {
-            color: var(--color-link);
-            border-color: var(--color-link);
+            opacity: 0.6;
         }
 
 /* Blog/Writing list */
@@ -231,10 +239,12 @@ header {
 
 a.blog-item {
     display: block;
-    padding: 0.75rem 0;
+    padding: 0.75rem;
     border-bottom: 1px solid var(--color-border);
+    border-radius: 6px;
     text-decoration: none;
     color: var(--color-text);
+    transition: background-color 0.15s ease;
 }
 
     a.blog-item:last-child {
@@ -242,12 +252,13 @@ a.blog-item {
     }
 
     a.blog-item:hover {
-        color: var(--color-text);
+        background-color: rgba(0, 0, 0, 0.05);
+        opacity: 1;
     }
 
-    a.blog-item:hover .blog-item-title {
-        color: var(--color-link);
-    }
+body.dark-mode a.blog-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
 
 article.blog-item-row {
     display: flex;
@@ -274,6 +285,7 @@ article.blog-item-row {
     color: var(--color-text-secondary);
     white-space: nowrap;
     flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* Projects list */
@@ -281,6 +293,25 @@ article.blog-item-row {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
+}
+
+    .projects-grid > a {
+        min-width: 0;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        transition: background-color 0.15s ease;
+        text-decoration: none;
+        color: var(--color-text);
+    }
+
+        .projects-grid > a:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            opacity: 1;
+        }
+
+body.dark-mode .projects-grid > a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 @media (min-width: 540px) {
@@ -295,30 +326,21 @@ article.blog-item-row {
     }
 }
 
-@media (min-width: 1200px) {
-    .projects-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
 .project-card {
-    border-radius: var(--radius);
-    border: 1px solid var(--color-border);
-    padding: 1.25rem;
-    transition: var(--transition);
-    height:
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
-
-    .project-card:hover {
-        box-shadow: var(--box-shadow);
-        transform: translateY(-2px);
-    }
 
 .project-title {
     font-size: 1.125rem;
     font-weight: 600;
     margin-top: 0;
     margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .project-description {
@@ -332,6 +354,7 @@ article.blog-item-row {
     align-items: center;
     gap: 1rem;
     font-size: 0.75rem;
+    margin-top: auto;
 }
 
 .project-language {
@@ -377,7 +400,14 @@ article.blog-item-row {
 
 .project-stars {
     color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
+
+    .project-stars svg {
+        vertical-align: middle;
+    }
 
 /* Footer */
 footer {
@@ -413,5 +443,5 @@ footer {
     }
 
         .social-links a:hover {
-            color: var(--color-link);
+            opacity: 0.6;
         }
