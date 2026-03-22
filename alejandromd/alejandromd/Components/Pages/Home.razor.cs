@@ -15,6 +15,9 @@ namespace alejandromd.Components.Pages
         [Inject]
         public required IRssService RssReader { get; set; }
 
+        [Inject]
+        public required ILogger<Home> Logger { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -28,19 +31,10 @@ namespace alejandromd.Components.Pages
                     Link = a.HtmlUrl
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Remove dummy data
-                repositories = new List<RepositoryModel>()
-                {
-                   new RepositoryModel
-                   {
-                       Name = "Test",
-                       Description = "This is a dummy project",
-                       Language = "C#",
-                       StargazersCount = "500"
-                   }
-                };
+                Logger.LogError(ex, "Failed to fetch GitHub repositories");
+                repositories = [];
             }
             posts = (await this.RssReader.ReadAsync()).Take(8);
             base.OnInitializedAsync();

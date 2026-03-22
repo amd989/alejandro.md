@@ -1,13 +1,10 @@
 using alejandromd.Components;
-using alejandromd.Misc;
 using alejandromd.Services;
 using DistributedCachePollyDecorator.Policies;
 using GitHubAuth;
 using GitHubAuth.Jwt;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Octokit;
 using StackExchange.Redis;
@@ -32,12 +29,8 @@ namespace alejandromd
             });
 
             builder.Services.Configure<GitHubOptions>(builder.Configuration.GetSection("GitHub"));
-            builder.Services.AddHttpClient("GitHub", (sp, client) =>
-            {
-                client.BaseAddress = GitHubClient.GitHubApiUrl;
-            });
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddLogging();
+
+            // GitHub App JWT authenticator
             builder.Services.AddTransient<IAuthenticator>(sp => {
                 var options = sp.GetRequiredService<IOptionsSnapshot<GitHubOptions>>().Value;
                 var httpClient = sp.GetRequiredService<IHttpClientFactory>();
@@ -49,77 +42,60 @@ namespace alejandromd
                 return authenticator;
             });
 
-            // Add services to the container.
-            builder.Services.AddTransient(sp => 
+            builder.Services.AddHttpClient("GitHub", (sp, client) =>
+            {
+                client.BaseAddress = GitHubClient.GitHubApiUrl;
+            });
+
+            // App-level GitHubClient authenticated with JWT (used to create installation tokens)
+            builder.Services.AddTransient(sp =>
             {
                 var options = sp.GetRequiredService<IOptionsSnapshot<GitHubOptions>>().Value;
                 var authenticator = sp.GetRequiredService<IAuthenticator>();
                 var authData = authenticator.GetToken();
 
-                // Use the JWT as a Bearer token
-                var appClient = new GitHubClient(new ProductHeaderValue(options.AppName))
+                return new GitHubClient(new ProductHeaderValue(options.AppName))
                 {
                     Credentials = new Credentials(authData.Token, Enum.Parse<AuthenticationType>(authData.TokenType.Mode))
                 };
-
-                return appClient;
             });
 
+            // Factory that creates an installation-authenticated GitHubClient (no user OAuth needed)
             builder.Services.AddTransient(sp =>
             {
                 var options = sp.GetRequiredService<IOptionsSnapshot<GitHubOptions>>().Value;
-                return new Func<string, OauthTokenRequest>(code => new OauthTokenRequest(options.ClientId, options.ClientSecret, code));
-            });
-
-            builder.Services.AddTransient(sp =>
-            {
-                var options = sp.GetRequiredService<IOptionsSnapshot<GitHubOptions>>().Value;
-                var cache = sp.GetRequiredService<IDistributedCache>();
                 var logging = sp.GetRequiredService<ILogger<GitHubClient>>();
-                var func = new Func<Task<GitHubClient>>(async () =>
+
+                return new Func<Task<(GitHubClient Client, string Owner)>>(async () =>
                 {
-                    var installationId = await cache.GetStringAsync(Constants.InstallationId);
-                    var token = await cache.GetStringAsync(Constants.OAuthToken);
+                    var appClient = sp.GetRequiredService<GitHubClient>();
 
-                    var installationClient = new GitHubClient(new ProductHeaderValue($"{options.AppId}-{installationId}"));
-                    if (string.IsNullOrEmpty(token))
+                    // Get the first installation of this app (your account)
+                    var installations = await appClient.GitHubApps.GetAllInstallationsForCurrent();
+                    if (installations.Count == 0)
                     {
-                        var refreshToken = await cache.GetStringAsync(Constants.RefreshToken);
-                        if (string.IsNullOrEmpty(refreshToken))
-                        {
-                            return installationClient;
-                        }
-
-                        var newToken = await installationClient.Oauth.CreateAccessTokenFromRenewalToken(new OauthTokenRenewalRequest(options.ClientId, options.ClientSecret, refreshToken));
-                        if (newToken.Error == null)
-                        {
-                            await cache.SetStringAsync(Constants.OAuthToken, newToken.AccessToken, new DistributedCacheEntryOptions { AbsoluteExpiration = DateTime.Now.AddSeconds(newToken.ExpiresIn) });
-                            await cache.SetStringAsync(Constants.RefreshToken, newToken.RefreshToken, new DistributedCacheEntryOptions { AbsoluteExpiration = DateTime.Now.AddSeconds(newToken.RefreshTokenExpiresIn) });
-                            token = newToken.AccessToken;
-                        }
-                        else
-                        {
-                            logging.LogError("Error refreshing token: {Error} {ErrorDescription} Url: {ErrorUri}", newToken.Error, newToken.ErrorDescription, newToken.ErrorUri);
-                        }
+                        logging.LogError("No GitHub App installations found. Install the app on your account first.");
+                        return (appClient, string.Empty);
                     }
 
-                    // Create a new GitHubClient using the installation token as authentication
-                    if(!string.IsNullOrEmpty(token))
+                    var installation = installations[0];
+
+                    // Create a short-lived installation access token (server-to-server, no user involvement)
+                    var tokenResponse = await appClient.GitHubApps.CreateInstallationToken(installation.Id);
+
+                    var client = new GitHubClient(new ProductHeaderValue($"{options.AppName}-installation"))
                     {
-                        installationClient.Credentials = new Credentials(token);
-                    }
-                    
-                    return installationClient;
+                        Credentials = new Credentials(tokenResponse.Token)
+                    };
+
+                    return (client, installation.Account.Login);
                 });
-
-                return func;
             });
 
-
-            builder.Services.AddTransient<IRssService>(sp => 
+            builder.Services.AddTransient<IRssService>(sp =>
             new WordpressRssService(
-                builder.Configuration.GetConnectionString("blog")!, 
-                sp.GetRequiredService<IDistributedCache>()));
+                builder.Configuration.GetConnectionString("blog")!,
+                sp.GetRequiredService<Microsoft.Extensions.Caching.Distributed.IDistributedCache>()));
 
             builder.Services.AddTransient<IGitHubService, GitHubService>();
 
@@ -143,9 +119,6 @@ namespace alejandromd
                 ExceptionsAllowedBeforeBreaking = 1
             });
 
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddControllers();
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
@@ -156,8 +129,6 @@ namespace alejandromd
             if (app.Environment.IsDevelopment())
             {
                 app.UseWebAssemblyDebugging();
-                app.UseSwagger();
-                app.UseSwaggerUI();
             }
             else
             {
@@ -176,10 +147,6 @@ namespace alejandromd
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
-
-            //app.UseAuthorization();
-
-            app.MapControllers();
 
             app.Run();
         }
