@@ -29,17 +29,13 @@
     <div class="blog-list">
         @foreach (var post in posts)
         {
-            <div class="blog-item">
-                <div class="blog-item-header">
-                    <div>
-                        <p class="blog-item-date">@post.PublishDate.ToString("MMM dd, yyyy")</p>
-                        <h3 class="blog-item-title">
-                            <a href="@post.Link">@post.Title</a>
-                        </h3>
-                    </div>
-                    <span class="blog-item-views">@post.Views views</span>
-                </div>
-            </div>
+            <a class="blog-item" href="@post.Link">
+                <article class="blog-item-row">
+                    <time class="blog-item-date">@post.PublishDate.ToString("MMM dd, yyyy")</time>
+                    <span class="blog-item-title">@post.Title</span>
+                    <span class="blog-item-views">@post.Views.ToString("N0") views</span>
+                </article>
+            </a>
         }
     </div>
 </section>

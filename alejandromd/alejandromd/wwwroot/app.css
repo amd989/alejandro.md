@@ -146,6 +146,11 @@ header {
     color: var(--color-text-secondary);
 }
 
+.intro p a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
 .wave-emoji {
     display: inline-block;
     animation: wave 2s infinite;
@@ -205,53 +210,70 @@ header {
     }
 
     .section-heading .view-all {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         color: var(--color-text-secondary);
-        border-bottom: none;
+        border: 1px solid var(--color-border);
+        border-radius: 2rem;
+        padding: 0.25rem 0.75rem;
+        text-decoration: none;
     }
 
         .section-heading .view-all:hover {
             color: var(--color-link);
+            border-color: var(--color-link);
         }
 
 /* Blog/Writing list */
 .blog-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 }
 
-.blog-item {
-    padding-bottom: 1rem;
+a.blog-item {
+    display: block;
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-text);
 }
 
-    .blog-item:last-child {
+    a.blog-item:last-child {
         border-bottom: none;
     }
 
-.blog-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
+    a.blog-item:hover {
+        color: var(--color-text);
+    }
 
-.blog-item-title {
-    margin: 0.25rem 0;
-    font-size: 1.125rem;
-    font-weight: 500;
+    a.blog-item:hover .blog-item-title {
+        color: var(--color-link);
+    }
+
+article.blog-item-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
 }
 
 .blog-item-date {
     font-size: 0.875rem;
     color: var(--color-text-secondary);
-    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 100px;
+}
+
+.blog-item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
 }
 
 .blog-item-views {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     color: var(--color-text-secondary);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Projects list */

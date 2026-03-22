@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IWebHostEnvironment Env
+
+<!DOCTYPE html>
 <html lang="en" class="h-100">
 
 <head>
@@ -9,7 +11,7 @@
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="app.css?v=@(File.GetLastWriteTime(Path.Combine(Env.WebRootPath, "app.css")).Ticks)" />
     <HeadOutlet />
 </head>
 
