@@ -15,18 +15,30 @@ namespace alejandromd.Services
         }
         public async Task<IEnumerable<RepositoryModel>> GetRepositoriesAsync()
         {
-            return await cache.GetOrCacheAsync("github:repos", async () =>
+            var all = await GetAllRepositoriesAsync();
+            return all.Take(6);
+        }
+
+        public async Task<IEnumerable<RepositoryModel>> GetAllRepositoriesAsync()
+        {
+            return await cache.GetOrCacheAsync("github:repos:all", async () =>
             {
                 var (client, owner) = await clientFactory();
                 var repos = await client.Repository.GetAllForUser(owner);
-                return repos.OrderByDescending(r => r.StargazersCount).Take(6).Select(a => new RepositoryModel
-                {
-                    Name = a.Name,
-                    Description = a.Description,
-                    Language = a.Language,
-                    StargazersCount = a.StargazersCount.ToString(),
-                    Link = a.HtmlUrl
-                }).ToList();
+                return repos
+                    .Where(r => !r.Fork)
+                    .OrderByDescending(r => r.UpdatedAt)
+                    .ThenByDescending(r => r.StargazersCount)
+                    .Select(a => new RepositoryModel
+                    {
+                        Name = a.Name,
+                        Description = a.Description,
+                        Language = a.Language,
+                        StargazersCount = a.StargazersCount.ToString(),
+                        Link = a.HtmlUrl,
+                        SocialImageUrl = $"https://opengraph.githubassets.com/1/{owner}/{a.Name}",
+                        Owner = owner
+                    }).ToList();
             }, TimeSpan.FromDays(1));
         }
     }

@@ -12,7 +12,7 @@
     --max-width: 960px;
 }
 
-body.dark-mode {
+html.dark-mode {
     --color-background: #111;
     --color-text: #fff;
     --color-text-secondary: #999;
@@ -256,7 +256,7 @@ a.blog-item {
         opacity: 1;
     }
 
-body.dark-mode a.blog-item:hover {
+html.dark-mode a.blog-item:hover {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -310,7 +310,7 @@ article.blog-item-row {
             opacity: 1;
         }
 
-body.dark-mode .projects-grid > a:hover {
+html.dark-mode .projects-grid > a:hover {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -407,6 +407,69 @@ body.dark-mode .projects-grid > a:hover {
 
     .project-stars svg {
         vertical-align: middle;
+    }
+
+/* Projects portfolio page */
+.projects-portfolio {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .projects-portfolio {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+a.project-portfolio-card {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: background-color 0.15s ease;
+}
+
+    a.project-portfolio-card:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+        opacity: 1;
+    }
+
+html.dark-mode a.project-portfolio-card:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.project-portfolio-image {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+}
+
+    .project-portfolio-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.project-portfolio-content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+    .project-portfolio-content .project-title {
+        margin-bottom: 0.25rem;
+    }
+
+    .project-portfolio-content .project-description {
+        margin-bottom: 0.75rem;
+    }
+
+    .project-portfolio-content .project-meta {
+        margin-top: auto;
     }
 
 /* Footer */

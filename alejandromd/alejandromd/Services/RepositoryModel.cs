@@ -7,5 +7,7 @@ namespace alejandromd.Services
         public string Language { get; set; }
         public string Link { get; set; }
         public string StargazersCount { get; set; }
+        public string SocialImageUrl { get; set; }
+        public string Owner { get; set; }
     }
 }
