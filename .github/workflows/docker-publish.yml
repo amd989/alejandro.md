@@ -98,3 +98,18 @@ jobs:
       - name: Trigger Deployment
         run: |
           curl -sf -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+
+      - name: Healthcheck
+        run: |
+          echo "Waiting for container to start..."
+          sleep 15
+          for i in $(seq 1 10); do
+            if curl -sf --max-time 5 https://alejandro.md > /dev/null 2>&1; then
+              echo "Site is up!"
+              exit 0
+            fi
+            echo "Attempt $i/10 failed, retrying in 10s..."
+            sleep 10
+          done
+          echo "Site did not come up after 10 attempts"
+          exit 1
