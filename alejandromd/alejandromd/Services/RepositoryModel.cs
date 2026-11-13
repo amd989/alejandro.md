@@ -6,8 +6,10 @@ namespace alejandromd.Services
         public string Description { get; set; }
         public string Language { get; set; }
         public string Link { get; set; }
-        public string StargazersCount { get; set; }
+        public int StargazersCount { get; set; }
         public string SocialImageUrl { get; set; }
         public string Owner { get; set; }
+        public bool IsOrganization { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
     }
 }

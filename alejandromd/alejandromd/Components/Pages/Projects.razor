@@ -16,7 +16,7 @@
                     <img src="@repo.SocialImageUrl" alt="@repo.Name" loading="lazy" onerror="this.parentElement.style.display='none'" />
                 </div>
                 <div class="project-portfolio-content">
-                    <h3 class="project-title">@repo.Name</h3>
+                    <h3 class="project-title">@if (repo.IsOrganization){<span class="project-owner">@repo.Owner/</span>}@repo.Name</h3>
                     <p class="project-description">@repo.Description</p>
                     <div class="project-meta">
                         @if (!string.IsNullOrEmpty(repo.Language))

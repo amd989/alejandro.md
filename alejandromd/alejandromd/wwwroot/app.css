@@ -422,6 +422,20 @@ html.dark-mode .projects-grid > a:hover {
     }
 }
 
+/* Only go to 3 columns when there is room to keep cards the same size as the
+   2-column layout; the grid breaks out of the container to get that width. */
+@media (min-width: 1500px) {
+    .projects-portfolio {
+        grid-template-columns: repeat(3, 1fr);
+        margin-inline: calc(50% - min(50vw - 2rem, 800px));
+    }
+}
+
+.project-owner {
+    font-weight: 400;
+    opacity: 0.6;
+}
+
 a.project-portfolio-card {
     border: 1px solid var(--color-border);
     border-radius: 12px;

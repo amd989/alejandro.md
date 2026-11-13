@@ -47,6 +47,12 @@ namespace alejandromd
                 client.BaseAddress = GitHubClient.GitHubApiUrl;
             });
 
+            builder.Services.AddHttpClient(Endpoints.OpenGraphImageEndpoint.HttpClientName, client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(20);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("alejandromd/1.0");
+            });
+
             // App-level GitHubClient authenticated with JWT (used to create installation tokens)
             builder.Services.AddTransient(sp =>
             {
@@ -142,6 +148,8 @@ namespace alejandromd
 
             app.MapStaticAssets();
             app.UseAntiforgery();
+
+            Endpoints.OpenGraphImageEndpoint.MapOpenGraphImages(app);
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
